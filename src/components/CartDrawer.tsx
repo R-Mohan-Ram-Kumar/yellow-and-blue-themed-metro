@@ -22,9 +22,18 @@ const CartDrawer = () => {
       <SheetContent className="w-full sm:max-w-lg">
         <SheetHeader>
           <SheetTitle className="flex items-center justify-between">
-            <span>Shopping Cart ({getTotalItems()})</span>
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Shopping Cart ({getTotalItems()})
+            </div>
             {items.length > 0 && (
-              <Button variant="ghost" size="sm" onClick={clearCart}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearCart}
+                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
                 Clear All
               </Button>
             )}
