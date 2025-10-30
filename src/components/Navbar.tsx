@@ -17,7 +17,7 @@ import {
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const { selectedCategory, setSelectedCategory } = useFilter();
+  const { selectedCategory, setSelectedCategory, searchQuery, setSearchQuery } = useFilter();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -64,8 +64,16 @@ const Navbar = () => {
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
+    setSearchQuery(""); // Clear search when changing category
     navigate(`/products?category=${category}`);
     setIsMenuOpen(false);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+    if (location.pathname !== "/products") {
+      navigate("/products");
+    }
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -91,11 +99,13 @@ const Navbar = () => {
 
           {/* Search bar - Desktop */}
           <div className="hidden md:flex flex-1 max-w-lg mx-8">
-            <div className="relative w-full group">
+          <div className="relative w-full group">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-accent transition-colors" />
               <Input
                 type="search"
                 placeholder="Search for shirts, jeans, shoes..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="pl-12 h-12 bg-muted/30 border-border/40 focus:border-accent/50 focus:bg-background rounded-xl shadow-smooth transition-all duration-200"
               />
             </div>
@@ -215,6 +225,8 @@ const Navbar = () => {
               <Input
                 type="search"
                 placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="pl-10 bg-muted/50"
               />
             </div>

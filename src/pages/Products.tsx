@@ -4,6 +4,7 @@ import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import { useFilter } from "@/contexts/FilterContext";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -308,6 +309,7 @@ const Products = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const category = searchParams.get("category") || "All";
+  const { searchQuery } = useFilter();
 
   const [sortBy, setSortBy] = useState("recommended");
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -330,6 +332,13 @@ const Products = () => {
 
   useEffect(() => {
     let products = [...allProducts];
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      products = products.filter((p) =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
 
     // Filter by category
     if (category !== "All") {
@@ -380,7 +389,7 @@ const Products = () => {
     }
 
     setFilteredProducts(products);
-  }, [category, sortBy, selectedSizes, selectedColors, selectedBrands, priceRange]);
+  }, [category, sortBy, selectedSizes, selectedColors, selectedBrands, priceRange, searchQuery]);
 
   const toggleSize = (size: string) => {
     setSelectedSizes((prev) =>
