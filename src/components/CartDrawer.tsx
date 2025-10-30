@@ -52,8 +52,8 @@ const CartDrawer = () => {
           ) : (
             <>
               <div className="flex-1 overflow-auto space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-3 rounded-lg bg-muted/30">
+                {items.map((item, index) => (
+                  <div key={`${item.id}-${item.color}-${item.size}-${index}`} className="flex gap-4 p-3 rounded-lg bg-muted/30">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -61,13 +61,20 @@ const CartDrawer = () => {
                     />
                     <div className="flex-1 space-y-2">
                       <h4 className="font-semibold text-sm line-clamp-1">{item.name}</h4>
+                      {(item.color || item.size) && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          {item.color && <span>Color: {item.color}</span>}
+                          {item.color && item.size && <span>•</span>}
+                          {item.size && <span>Size: {item.size}</span>}
+                        </div>
+                      )}
                       <p className="text-sm font-bold">₹{item.price}</p>
                       <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
                           size="icon"
                           className="h-7 w-7"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity - 1, item.color, item.size)}
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -76,7 +83,7 @@ const CartDrawer = () => {
                           variant="outline"
                           size="icon"
                           className="h-7 w-7"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity + 1, item.color, item.size)}
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
@@ -84,7 +91,7 @@ const CartDrawer = () => {
                           variant="ghost"
                           size="icon"
                           className="h-7 w-7 ml-auto"
-                          onClick={() => removeFromCart(item.id)}
+                          onClick={() => removeFromCart(item.id, item.color, item.size)}
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>

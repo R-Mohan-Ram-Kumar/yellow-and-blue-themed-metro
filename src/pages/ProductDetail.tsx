@@ -156,6 +156,8 @@ const ProductDetail = () => {
       name: product.name,
       price: product.price,
       image: product.images[0],
+      color: selectedColor.name,
+      size: selectedSize,
     });
   };
 
